@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from "react";
-import { Link, useRouter } from "@tanstack/react-router";
+import { Link, useRouter, useRouterState } from "@tanstack/react-router";
 import {
   LayoutDashboard, ClipboardList, Clock, Calendar, Briefcase, AlertTriangle,
   BarChart3, ShieldCheck, MapPin, LogOut, Menu, Activity, Search, ChevronDown,
@@ -41,8 +41,7 @@ const navGroups = [
 ];
 
 function NavList({ onNavigate }: { onNavigate?: () => void }) {
-  const router = useRouter();
-  const path = router.state.location.pathname;
+  const path = useRouterState({ select: (s) => s.location.pathname });
   return (
     <nav className="flex flex-col gap-6 p-4">
       {navGroups.map((g) => (
