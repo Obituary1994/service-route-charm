@@ -30,11 +30,20 @@ function FaltasPage() {
     enabled: !!userId,
     queryFn: async () => {
       const q = supabase.from("faltas_justificativas")
-        .select("*, agente:agente_id(nome_completo)")
+        .select("*")
         .order("created_at", { ascending: false });
       if (role === "agente") q.eq("agente_id", userId!);
-      const { data } = await q;
-      return data ?? [];
+      const { data, error } = await q;
+      if (error) throw error;
+      const rows = data ?? [];
+      if (role === "agente" || rows.length === 0) return rows.map((r) => ({ ...r, agente: null }));
+      const ids = Array.from(new Set(rows.map((r) => r.agente_id)));
+      const { data: profs } = await supabase
+        .from("profiles")
+        .select("id, nome_completo")
+        .in("id", ids);
+      const byId = new Map((profs ?? []).map((p) => [p.id, p]));
+      return rows.map((r) => ({ ...r, agente: byId.get(r.agente_id) ?? null }));
     },
   });
 
