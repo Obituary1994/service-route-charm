@@ -2,7 +2,7 @@ import { useState, type ReactNode } from "react";
 import { Link, useRouter } from "@tanstack/react-router";
 import {
   LayoutDashboard, ClipboardList, Clock, Calendar, Briefcase, AlertTriangle,
-  BarChart3, ShieldCheck, MapPin, Bell, LogOut, Menu, Activity, Search, ChevronDown,
+  BarChart3, ShieldCheck, MapPin, LogOut, Menu, Activity, Search, ChevronDown,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,6 +16,7 @@ import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { supabase } from "@/integrations/supabase/client";
 import { useProfile } from "@/hooks/use-profile";
 import { cn } from "@/lib/utils";
+import { NotificationsBell } from "@/components/notifications-bell";
 
 const navGroups = [
   {
@@ -147,10 +148,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           </div>
 
           <div className="ml-auto flex items-center gap-2">
-            <Button variant="ghost" size="icon" className="relative">
-              <Bell className="h-5 w-5" />
-              <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-accent" />
-            </Button>
+            <NotificationsBell />
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
