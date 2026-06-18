@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "SaúdeOps — Operação completa para UBS" },
+      { title: "VitaCare OS — Operação completa para UBS" },
       { name: "description", content: "Fichas, ponto, agenda, OS, auditoria e relatórios numa única plataforma para agentes comunitários e gestores de saúde." },
     ],
   }),
@@ -30,7 +30,7 @@ function Landing() {
             <div className="grid h-9 w-9 place-items-center rounded-lg gradient-hero text-primary-foreground">
               <Activity className="h-5 w-5" />
             </div>
-            <span className="font-display text-lg font-bold tracking-tight">SaúdeOps</span>
+            <span className="font-display text-lg font-bold tracking-tight">VitaCare OS</span>
           </Link>
           <div className="flex items-center gap-3">
             <Link to="/auth"><Button variant="ghost">Entrar</Button></Link>
@@ -117,7 +117,7 @@ function Landing() {
 
       <footer className="border-t border-border py-8">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 text-sm text-muted-foreground">
-          <span>© {new Date().getFullYear()} SaúdeOps</span>
+          <span>© {new Date().getFullYear()} VitaCare OS</span>
           <span>Atenção primária, com método.</span>
         </div>
       </footer>
