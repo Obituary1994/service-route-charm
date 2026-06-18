@@ -84,7 +84,7 @@ function SidebarContent() {
           <Activity className="h-5 w-5" />
         </div>
         <div>
-          <div className="font-display text-base font-bold text-sidebar-foreground">SaúdeOps</div>
+          <div className="font-display text-base font-bold text-sidebar-foreground">VitaCare OS</div>
           <div className="text-[10px] uppercase tracking-wider text-sidebar-foreground/50">UBS Operations</div>
         </div>
       </div>

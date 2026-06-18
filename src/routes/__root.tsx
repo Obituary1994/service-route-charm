@@ -71,9 +71,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "SaúdeOps — Gestão de visitas e UBS" },
+      { title: "VitaCare OS — Gestão de visitas e UBS" },
       { name: "description", content: "Plataforma de gestão de visitas domiciliares, ponto, agenda, OS e auditoria para Unidades Básicas de Saúde." },
-      { property: "og:title", content: "SaúdeOps" },
+      { property: "og:title", content: "VitaCare OS" },
       { property: "og:description", content: "Gestão completa de agentes, visitas e operação da UBS." },
       { property: "og:type", content: "website" },
     ],

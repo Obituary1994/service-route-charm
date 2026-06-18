@@ -12,8 +12,8 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Entrar — SaúdeOps" },
-      { name: "description", content: "Acesse sua conta SaúdeOps." },
+      { title: "Entrar — VitaCare OS" },
+      { name: "description", content: "Acesse sua conta VitaCare OS." },
     ],
   }),
   component: AuthPage,
@@ -79,7 +79,7 @@ function AuthPage() {
           <div className="grid h-10 w-10 place-items-center rounded-lg bg-white/15">
             <Activity className="h-5 w-5" />
           </div>
-          <span className="font-display text-xl font-bold">SaúdeOps</span>
+          <span className="font-display text-xl font-bold">VitaCare OS</span>
         </Link>
         <div>
           <h2 className="font-display text-4xl font-bold leading-tight">
@@ -89,7 +89,7 @@ function AuthPage() {
             Plataforma única para agentes, coordenadores e auditores. Fichas, ponto, OS, agenda, auditoria e relatórios.
           </p>
         </div>
-        <div className="text-sm text-primary-foreground/70">© {new Date().getFullYear()} SaúdeOps</div>
+        <div className="text-sm text-primary-foreground/70">© {new Date().getFullYear()} VitaCare OS</div>
       </div>
 
       <div className="flex items-center justify-center p-6 md:p-12">
@@ -99,7 +99,7 @@ function AuthPage() {
               <div className="grid h-9 w-9 place-items-center rounded-lg gradient-hero text-primary-foreground">
                 <Activity className="h-5 w-5" />
               </div>
-              <span className="font-display text-lg font-bold">SaúdeOps</span>
+              <span className="font-display text-lg font-bold">VitaCare OS</span>
             </Link>
           </div>
 
