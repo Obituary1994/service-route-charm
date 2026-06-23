@@ -2,7 +2,7 @@ import { useState, type ReactNode } from "react";
 import { Link, useRouter, useRouterState } from "@tanstack/react-router";
 import {
   LayoutDashboard, ClipboardList, Clock, Calendar, Briefcase, AlertTriangle,
-  BarChart3, ShieldCheck, MapPin, LogOut, Menu, Activity, Search, ChevronDown,
+  BarChart3, ShieldCheck, MapPin, LogOut, Menu, Activity, Search, ChevronDown, Users,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,6 +23,7 @@ const navGroups = [
     label: "Operação",
     items: [
       { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+      { to: "/pacientes", label: "Pacientes", icon: Users },
       { to: "/ficha/nova", label: "Nova ficha", icon: ClipboardList },
       { to: "/ponto", label: "Ponto", icon: Clock },
       { to: "/agenda", label: "Agenda & OS", icon: Calendar },
