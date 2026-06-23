@@ -79,6 +79,31 @@ function AgendaPage() {
 
   const semana = Array.from({ length: 7 }, (_, i) => addDays(startOfWeek(new Date(), { weekStartsOn: 1 }), i));
 
+  const canCreate = role === "agente" || role === "coordenador";
+
+  const handleCreate = async () => {
+    if (!form.paciente_id) return toast.error("Selecione um paciente.");
+    if (!form.data || !form.hora) return toast.error("Informe data e hora.");
+    if (!profile?.ubs_id) return toast.error("Seu perfil não está vinculado a uma UBS.");
+    const dt = new Date(`${form.data}T${form.hora}:00`);
+    if (Number.isNaN(dt.getTime())) return toast.error("Data/hora inválida.");
+    setSaving(true);
+    const { error } = await supabase.from("agendamentos").insert({
+      paciente_id: form.paciente_id,
+      agente_id: userId,
+      ubs_id: profile.ubs_id,
+      data_hora: dt.toISOString(),
+      duracao_minutos: Number(form.duracao_minutos) || 30,
+      observacoes: form.observacoes.trim() || null,
+    });
+    setSaving(false);
+    if (error) return toast.error(error.message);
+    toast.success("Agendamento criado!");
+    setOpen(false);
+    setForm(f => ({ ...f, paciente_id: "", observacoes: "" }));
+    qc.invalidateQueries({ queryKey: ["agenda-semana"] });
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -86,8 +111,62 @@ function AgendaPage() {
           <h1 className="font-display text-3xl font-bold">Agenda & Ordens de Serviço</h1>
           <p className="text-sm text-muted-foreground">Semana de {format(semana[0], "dd/MM")} a {format(semana[6], "dd/MM")}</p>
         </div>
-        <Button><Plus className="mr-2 h-4 w-4" />Novo agendamento</Button>
+        {canCreate && (
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
+              <Button><Plus className="mr-2 h-4 w-4" />Novo agendamento</Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Novo agendamento</DialogTitle>
+                <DialogDescription>Vincule a visita a um paciente cadastrado.</DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4">
+                <div>
+                  <Label>Paciente *</Label>
+                  <Select value={form.paciente_id} onValueChange={v => setForm(f => ({ ...f, paciente_id: v }))}>
+                    <SelectTrigger><SelectValue placeholder="Selecione o paciente" /></SelectTrigger>
+                    <SelectContent>
+                      {(pacientes ?? []).map(p => (
+                        <SelectItem key={p.id} value={p.id}>{p.nome_completo}</SelectItem>
+                      ))}
+                      {(!pacientes || pacientes.length === 0) && (
+                        <div className="px-3 py-2 text-sm text-muted-foreground">Cadastre um paciente primeiro.</div>
+                      )}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="grid grid-cols-3 gap-3">
+                  <div>
+                    <Label>Data *</Label>
+                    <Input type="date" value={form.data} onChange={e => setForm(f => ({ ...f, data: e.target.value }))} />
+                  </div>
+                  <div>
+                    <Label>Hora *</Label>
+                    <Input type="time" value={form.hora} onChange={e => setForm(f => ({ ...f, hora: e.target.value }))} />
+                  </div>
+                  <div>
+                    <Label>Duração (min)</Label>
+                    <Input type="number" min={5} step={5} value={form.duracao_minutos} onChange={e => setForm(f => ({ ...f, duracao_minutos: e.target.value }))} />
+                  </div>
+                </div>
+                <div>
+                  <Label>Observações</Label>
+                  <Textarea rows={3} value={form.observacoes} onChange={e => setForm(f => ({ ...f, observacoes: e.target.value }))} />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button variant="outline" onClick={() => setOpen(false)} disabled={saving}>Cancelar</Button>
+                <Button onClick={handleCreate} disabled={saving}>
+                  {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  Agendar
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        )}
       </div>
+
 
       <div className="grid gap-4 md:grid-cols-7">
         {semana.map(dia => {
