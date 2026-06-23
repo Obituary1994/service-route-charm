@@ -1,20 +1,50 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
-import { Calendar, Plus } from "lucide-react";
+import { useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { Calendar, Plus, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useProfile } from "@/hooks/use-profile";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger,
+} from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { format, startOfWeek, addDays, isSameDay } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/agenda")({
   component: AgendaPage,
 });
 
+
 function AgendaPage() {
-  const { userId, role } = useProfile();
+  const { userId, role, profile } = useProfile();
+  const qc = useQueryClient();
+  const [open, setOpen] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const today = new Date();
+  const [form, setForm] = useState({
+    paciente_id: "",
+    data: format(today, "yyyy-MM-dd"),
+    hora: "09:00",
+    duracao_minutos: "30",
+    observacoes: "",
+  });
+
+  const { data: pacientes } = useQuery({
+    queryKey: ["pacientes-mini"],
+    queryFn: async () => {
+      const { data } = await supabase.from("pacientes").select("id, nome_completo").order("nome_completo").limit(200);
+      return data ?? [];
+    },
+  });
+
 
   const { data: agendamentos } = useQuery({
     queryKey: ["agenda-semana", userId, role],
